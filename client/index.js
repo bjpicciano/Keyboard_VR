@@ -10,15 +10,23 @@ function setUpSocketListeners() {
     var self = this;
 
     // When the server sends us a handshake we send one back to acknowledge
-    this.socket.on('handshake', function (player) {
-        var a_entity = document.createElement(player.tag);
+    this.socket.on('handshake', function (isMobile, player) {
+        if (!isMobile && player) {
+            var a_entity = document.createElement(player.tag);
 
-        a_entity.setAttribute("id", player.id);
-        a_entity.setAttribute("position", player.position);
-        a_entity.appendChild(createPlayerCamera());
-        a_entity.setAttribute('wasd-movement', "");
+            a_entity.setAttribute("id", player.id);
+            a_entity.setAttribute("position", player.position);
+            a_entity.appendChild(createPlayerCamera());
+            a_entity.setAttribute('wasd-movement', "");
 
-        document.querySelector('a-scene').appendChild(a_entity);
+            document.querySelector('a-scene').appendChild(a_entity);
+
+            alert("Your mobile code is:\n\n'" + player.code + "'");
+        } else if (isMobile) {
+            var code = prompt("Please enter your mobile code after connecting with your desktop")
+
+            self.socket.emit('check_code', code);
+        }
     });
 
     this.socket.on('createServerEntities', function (entities) {
@@ -32,6 +40,11 @@ function setUpSocketListeners() {
                 document.querySelector('a-scene').appendChild(a_entity);
             }
         });
+    });
+
+    this.socket.on('attachToDesktopPlayer', function (id) {
+        var player = document.getElementById(id);
+        player.appendChild(createPlayerCamera());
     });
 
     this.socket.on('removeServerEntities', function (entities) {

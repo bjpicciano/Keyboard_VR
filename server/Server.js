@@ -25,12 +25,10 @@ io.on('connection', function (socket) {
         if (!isMobile) {
             players[socket.id] = new Player(socket.id, CodeGenerator.getCode(socket.id));
 
-            console.log(players[socket.id].id, players[socket.id].code);
-
             // Give my client my player
-            socket.emit('handshake', players[socket.id]);
+            socket.emit('handshake', isMobile, players[socket.id]);
 
-            var connectMessage = "'" + socket.id + "' has connected";
+            var connectMessage = "'" + socket.id + "' has connected with code: " + players[socket.id].code;
             console.log(connectMessage);
 
             // Give my client all other players
@@ -38,8 +36,18 @@ io.on('connection', function (socket) {
             // Tell everyone else I'm here
             socket.broadcast.emit('createServerEntities', packPlayerToObject(socket.id));
         } else {
+            socket.emit('handshake', isMobile);
+        }
+    });
+
+    socket.on('check_code', function (code) {
+        var id = CodeGenerator.validateCode(code);
+
+        if (id) {
             socket.emit('createServerEntities', players);
-            console.log("Mobile")
+            socket.emit('attachToDesktopPlayer', id);
+        } else {
+            socket.emit('handshake', true);
         }
     });
 
@@ -67,9 +75,11 @@ io.on('connection', function (socket) {
         var disconnectMessage = "'" + socket.id + "' has disconnected ";
         console.log(disconnectMessage);
 
-        delete CodeGenerator.codes[players[socket.id].code];
-        delete players[socket.id];
-        console.log(CodeGenerator.codes)
+        if (players[socket.id]) {
+            var code = players[socket.id].code;
+            if (code) delete CodeGenerator.codes[code];
+            delete players[socket.id];
+        }
         socket.disconnect();
     });
 });

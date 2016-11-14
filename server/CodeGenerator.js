@@ -26,6 +26,13 @@ var CodeGenerator = function () {
         }
     };
 
+    this.validateCode = function (code) {
+        var id = this.codes[code];
+
+        if (id) return id;
+        else return false;
+    };
+
     this.getRandomItemInArray = function (arr) {
         return arr[Math.floor(Math.random()*arr.length)];
     }
