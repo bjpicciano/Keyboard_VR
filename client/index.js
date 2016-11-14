@@ -11,10 +11,6 @@ function setUpSocketListeners() {
 
     // When the server sends us a handshake we send one back to acknowledge
     this.socket.on('handshake', function (player) {
-        // if (AFRAME.utils.isMobile()) {
-        //     var code = prompt("Enter code to connect with PC!");
-        //
-        // } else {
         var a_entity = document.createElement(player.tag);
 
         a_entity.setAttribute("id", player.id);
@@ -34,7 +30,6 @@ function setUpSocketListeners() {
                 a_entity.setAttribute("position", entity.position);
 
                 document.querySelector('a-scene').appendChild(a_entity);
-                // console.log(entity);
             }
         });
     });

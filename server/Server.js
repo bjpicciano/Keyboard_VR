@@ -1,15 +1,16 @@
 var express = require('express');
 var Player = require('./Player');
+var CodeGen = require('./CodeGenerator');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 // Serve our clients files from the base directory
 app.use(express.static("./"));
 
+var CodeGenerator = new CodeGen();
 var players = {};
 
 io.on('connection', function (socket) {
-
     // socket.on('handshake', function (username) {
     //     var connectMessage = "'" + socket.id + "' has connected";
     //     console.log(connectMessage);
@@ -22,7 +23,10 @@ io.on('connection', function (socket) {
 
     socket.on('handshake', function (isMobile) {
         if (!isMobile) {
-            players[socket.id] = new Player(socket.id);
+            players[socket.id] = new Player(socket.id, CodeGenerator.getCode(socket.id));
+
+            console.log(players[socket.id].id, players[socket.id].code);
+
             // Give my client my player
             socket.emit('handshake', players[socket.id]);
 
@@ -63,7 +67,9 @@ io.on('connection', function (socket) {
         var disconnectMessage = "'" + socket.id + "' has disconnected ";
         console.log(disconnectMessage);
 
+        delete CodeGenerator.codes[players[socket.id].code];
         delete players[socket.id];
+        console.log(CodeGenerator.codes)
         socket.disconnect();
     });
 });

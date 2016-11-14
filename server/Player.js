@@ -1,5 +1,6 @@
-var Player = function (id) {
+var Player = function (id, code) {
     this.id = id;
+    this.code = code;
     this.tag = "a-box";
     this.position = {x: 0, y: 1, z: 0};
     this.previousPosition = {x: 0, y: 0, z: 0};
