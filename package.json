@@ -1,0 +1,17 @@
+{
+  "name": "keyboard_vr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./server/Server.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "dependencies": {
+    "aframe": "*",
+    "budo": "*",
+    "socket.io": "*",
+    "express": "*"
+  },
+  "author": "",
+  "license": ""
+}

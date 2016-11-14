@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+
+  <meta charset="utf-8">
+  <title>Keyboard VR</title>
+  <meta name="description" content="Control your lifeless headset with your PC!">
+
+  <!-- Library -->
+  <script src="node_modules/socket.io-client/socket.io.js"></script>
+  <script src="lib/aframe.js"></script>
+  <script src="/client/index.js"></script>
+
+  <!-- Components -->
+  <script src="client/components/follow-entity.js"></script>
+  <script src="client/components/wasd-movement.js"></script>
+
+</head>
+<body>
+  <a-scene>
+    <a-assets>
+      <img id="water" src="assets/background.png"/>
+    </a-assets>
+
+    <!--<a-box id="bbe" scale="2 0.2 0.2 " position="-2 1 -4" rotation="0 0 0" color="purple">-->
+      <!--<a-event name="click" color="red" enterVRHandler></a-event>-->
+    <!--</a-box>-->
+    <!--<a-box position="-1 3 -3" rotation="0 45 0" follow-entity="target:#bbe; offset: -0.5 0 -0.5;"></a-box>-->
+    <!--<a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>-->
+    <!--<a-cylinder position="1 1 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>-->
+    <a-plane position="0 0 -4" rotation="-90 0 0" width="32" height="32" repeat="4 4" src="#water"></a-plane>
+    <a-sky color="#ECECEC"></a-sky>
+
+    <!--<a-sphere id="bush" position="1 0.5 -2" radius="1" color="green" opacity="0.9">-->
+    <!--</a-sphere>-->
+    <!--<a-camera id="camera">-->
+      <!--<a-cursor id="cursor" fuse="false" material="depthTest:false">-->
+      <!--</a-cursor>-->
+    <!--</a-camera>-->
+    <!--<a-plane id="palette" color="red" rotation="45 0 0" width="1.5" height="1" follow-entity="target:#camera; offset: 0 0.7 -0.5;"></a-plane>-->
+  </a-scene>
+
+  <!--<script src="lib/aframe-inspector.min.js"></script>-->
+</body>
+</html>
