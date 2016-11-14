@@ -1,6 +1,7 @@
 // Here is where we connect to the server and set up our socket listeners
 var socket = io.connect('');
 setUpSocketListeners();
+socket.emit('handshake', AFRAME.utils.isMobile());
 
 /**
  * Declare our socket's listeners here.
@@ -10,21 +11,18 @@ function setUpSocketListeners() {
 
     // When the server sends us a handshake we send one back to acknowledge
     this.socket.on('handshake', function (player) {
-        if (AFRAME.utils.isMobile()) {
-            var code = prompt("Enter code to connect with PC!");
+        // if (AFRAME.utils.isMobile()) {
+        //     var code = prompt("Enter code to connect with PC!");
+        //
+        // } else {
+        var a_entity = document.createElement(player.tag);
 
-        } else {
-            var a_entity = document.createElement(player.tag);
+        a_entity.setAttribute("id", player.id);
+        a_entity.setAttribute("position", player.position);
+        a_entity.appendChild(createPlayerCamera());
+        a_entity.setAttribute('wasd-movement', "");
 
-            a_entity.setAttribute("id", player.id);
-            a_entity.setAttribute("position", player.position);
-            a_entity.appendChild(createPlayerCamera());
-            a_entity.setAttribute('wasd-movement', "");
-
-            document.querySelector('a-scene').appendChild(a_entity);
-        }
-
-        self.socket.emit('handshake', "USER");
+        document.querySelector('a-scene').appendChild(a_entity);
     });
 
     this.socket.on('createServerEntities', function (entities) {

@@ -9,21 +9,37 @@ app.use(express.static("./"));
 var players = {};
 
 io.on('connection', function (socket) {
-    // Create and give the client his player
-    players[socket.id] = new Player(socket.id);
-    socket.emit('handshake', players[socket.id]);
 
-    socket.on('handshake', function (username) {
-        var connectMessage = "'" + socket.id + "' has connected";
-        console.log(connectMessage);
+    // socket.on('handshake', function (username) {
+    //     var connectMessage = "'" + socket.id + "' has connected";
+    //     console.log(connectMessage);
+    //
+    //     // Give my client my player
+    //     socket.emit('createServerEntities', players);
+    //     // Tell everyone else I'm here
+    //     socket.broadcast.emit('createServerEntities', packPlayerToObject(socket.id));
+    // });
 
-        // Give my client my player
-        socket.emit('createServerEntities', players);
-        // Tell everyone else I'm here
-        socket.broadcast.emit('createServerEntities', packPlayerToObject(socket.id));
+    socket.on('handshake', function (isMobile) {
+        if (!isMobile) {
+            players[socket.id] = new Player(socket.id);
+            // Give my client my player
+            socket.emit('handshake', players[socket.id]);
+
+            var connectMessage = "'" + socket.id + "' has connected";
+            console.log(connectMessage);
+
+            // Give my client all other players
+            socket.emit('createServerEntities', players);
+            // Tell everyone else I'm here
+            socket.broadcast.emit('createServerEntities', packPlayerToObject(socket.id));
+        } else {
+            socket.emit('createServerEntities', players);
+            console.log("Mobile")
+        }
     });
 
-    // Separate into player object
+        // Separate into player object
     socket.on('key_down', function (key) {
         players[socket.id].keys[key] = true;
     });
