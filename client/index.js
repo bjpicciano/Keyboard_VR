@@ -21,9 +21,9 @@ function setUpSocketListeners() {
 
             document.querySelector('a-scene').appendChild(a_entity);
 
-            alert("Your mobile code is:\n\n'" + player.code + "'");
+            // alert("Your mobile code is:\n\n'" + player.code + "'");
         } else if (isMobile) {
-            var code = prompt("Please enter your mobile code after connecting with your desktop")
+            var code = prompt("Please enter your mobile code after connecting with your desktop");
 
             self.socket.emit('check_code', code);
         }
@@ -105,7 +105,8 @@ function getPlayer () {
 function createPlayerCamera() {
     var a_camera = document.createElement("a-camera");
     a_camera.setAttribute("id", "camera");
-    a_camera.setAttribute("wasd-controls-enabled", "false");
+    a_camera.setAttribute("mouse-lock", "");
+    a_camera.setAttribute("wasd-controls-enabled", "false"); // disable default wasd controls
 
     var a_cursor = document.createElement("a-cursor");
     a_cursor.setAttribute("id", "cursor");
