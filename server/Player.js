@@ -3,6 +3,7 @@ var Player = function (id, code) {
     this.code = code;
     this.tag = "a-box";
     this.position = {x: 0, y: 1, z: 0};
+    this.direction = 0;
     this.previousPosition = {x: 0, y: 0, z: 0};
     this.syncData = {};
 
@@ -20,27 +21,33 @@ var Player = function (id, code) {
     };
 
     this.handleInput = function () {
-        var x = 0, z = 0;
+        var dx = 0, dz = 0, direction = this.direction;
 
         if (this.keys.w) {
-            z -= this.velocity;
-        }
-        if (this.keys.a) {
-            x -= this.velocity;
+            dx = Math.sin(direction) * -this.velocity;
+            dz = Math.cos(direction) * -this.velocity;
         }
         if (this.keys.s) {
-            z += this.velocity;
+            dx = Math.sin(direction) * this.velocity;
+            dz = Math.cos(direction) * this.velocity;
+        }
+        if (this.keys.a) {
+            direction = this.direction - Math.PI/2;
+            dx = Math.sin(direction) * this.velocity;
+            dz = Math.cos(direction) * this.velocity;
         }
         if (this.keys.d) {
-            x += this.velocity;
+            direction = this.direction + Math.PI/2;
+            dx = Math.sin(direction) * this.velocity;
+            dz = Math.cos(direction) * this.velocity;
         }
 
-        if (x != 0 || z != 0) {
+        if (dx != 0 || dz != 0) {
             this.previousPosition.x = this.position.x;
             this.previousPosition.z = this.position.z;
 
-            this.position.x += x;
-            this.position.z += z;
+            this.position.x += dx;
+            this.position.z += dz;
 
             this.syncData.id = this.id;
             this.syncData.position = Object.assign({}, this.position);

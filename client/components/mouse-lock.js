@@ -1,8 +1,10 @@
+var sens = 1/25;
+
 AFRAME.registerComponent('mouse-lock', {
     schema: {
         lockEnabled: { default: true },
         isLocked: { default: false },
-        sensitivity: { default: 1 / 30 }
+        sensitivity: { default: sens }
     },
 
     init : function () {
@@ -27,18 +29,22 @@ AFRAME.registerComponent('mouse-lock', {
             if ((document.pointerLockElement === canvas ||
                 document.mozPointerLockElement === canvas)) {
                 this.isLocked = true;
-                console.log('The pointer lock status is now locked');
                 document.addEventListener("mousemove", self.mouseMove, false);
             } else {
                 this.isLocked = false;
-                console.log('The pointer lock status is now unlocked');
                 document.removeEventListener("mousemove", self.mouseMove, false);
             }
         }
     },
 
     mouseMove: function (e) {
-        console.log(e)
+        var a_camera = document.querySelector("a-camera");
+
+        var movementX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
+        var movementY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
+
+        a_camera.getAttribute("rotation").y -= movementX * sens;
+        a_camera.getAttribute("rotation").x -= movementY * sens;
     }
 
 });

@@ -23,8 +23,9 @@ AFRAME.registerComponent('wasd-movement', {
         document.body.onkeydown = function (event) {
             var key = event.key;
             if (self.keys.hasOwnProperty(key)) {
+                var rotationY = document.querySelector("a-camera").getAttribute("rotation").y; // Actually x axis :|
                 self.keys[key] = true;
-                socket.emit("key_down", key);
+                socket.emit("key_down", key, rotationY);
             }
         };
 

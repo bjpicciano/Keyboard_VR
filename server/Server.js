@@ -52,8 +52,9 @@ io.on('connection', function (socket) {
     });
 
         // Separate into player object
-    socket.on('key_down', function (key) {
+    socket.on('key_down', function (key, rotationY) {
         players[socket.id].keys[key] = true;
+        players[socket.id].direction = rotationY * Math.PI/180;
     });
 
     socket.on('key_up', function (key) {
