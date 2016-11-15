@@ -13,15 +13,17 @@ function setUpSocketListeners() {
     this.socket.on('handshake', function (isMobile, player) {
         if (!isMobile && player) {
             var a_entity = document.createElement(player.tag);
-
             a_entity.setAttribute("id", player.id);
             a_entity.setAttribute("position", player.position);
-            a_entity.appendChild(createPlayerCamera());
             a_entity.setAttribute('wasd-movement', "");
 
-            document.querySelector('a-scene').appendChild(a_entity);
+            var a_camera = createPlayerCamera();
+            a_camera.setAttribute("follow-entity", "target:" + player.id + "; offset: 0 0.4 0;");
 
-            // alert("Your mobile code is:\n\n'" + player.code + "'");
+            document.querySelector('a-scene').appendChild(a_entity);
+            document.querySelector('a-scene').appendChild(a_camera);
+
+            alert("Your mobile code is:\n\n'" + player.code + "'");
         } else if (isMobile) {
             var code = prompt("Please enter your mobile code after connecting with your desktop");
 
@@ -44,7 +46,8 @@ function setUpSocketListeners() {
 
     this.socket.on('attachToDesktopPlayer', function (id) {
         var player = document.getElementById(id);
-        player.appendChild(createPlayerCamera());
+        var a_camera = createPlayerCamera();
+        player.appendChild(a_camera);
     });
 
     this.socket.on('removeServerEntities', function (entities) {
@@ -64,9 +67,15 @@ function setUpSocketListeners() {
 
             if (a_entity && a_entity.object3D) {
                 //replace with recursive algorithm for each property in entity
-                a_entity.object3D.position.x = entity.position.x;
-                a_entity.object3D.position.y = entity.position.y;
-                a_entity.object3D.position.z = entity.position.z;
+                if (entity.position) {
+                    a_entity.object3D.position.x = entity.position.x;
+                    a_entity.object3D.position.y = entity.position.y;
+                    a_entity.object3D.position.z = entity.position.z;
+                }
+                if (entity.rotation) {
+                    // a_entity.object3D.rotation.x = entity.rotation.x * Math.PI/180; //y-axis is trippy while in VR :)
+                    a_entity.object3D.rotation.y = entity.rotation.y * Math.PI/180;
+                }
             }
         });
     });
@@ -106,6 +115,8 @@ function createPlayerCamera() {
     var a_camera = document.createElement("a-camera");
     a_camera.setAttribute("id", "camera");
     a_camera.setAttribute("mouse-lock", "");
+
+    // a_camera.setAttribute("drag-look-controls-enabled", "false");
     a_camera.setAttribute("wasd-controls-enabled", "false"); // disable default wasd controls
 
     var a_cursor = document.createElement("a-cursor");

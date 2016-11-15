@@ -11,13 +11,15 @@ AFRAME.registerComponent('follow-entity', {
 
     tick: function (t) {
         var target = this.data.target;
-        var object3D = this.el.object3D;
-        
+
         if (target) {
             var offset = this.data.offset;
-            var targetPos = document.querySelector(target).object3D.getWorldPosition();
+            var targetPos = document.getElementById(target).object3D.getWorldPosition();
 
-            object3D.position.set(targetPos.x + offset.x, targetPos.y + offset.y, targetPos.z + offset.z);
+            var me = document.getElementById(this.el.id);
+            me.getAttribute("position").x = targetPos.x + offset.x;
+            me.getAttribute("position").y = targetPos.y + offset.y;
+            me.getAttribute("position").z = targetPos.z + offset.z;
         }
     }
 });

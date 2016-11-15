@@ -3,8 +3,10 @@ var Player = function (id, code) {
     this.code = code;
     this.tag = "a-box";
     this.position = {x: 0, y: 1, z: 0};
-    this.direction = 0;
+    this.rotation = {x: 0, y: 0};
     this.previousPosition = {x: 0, y: 0, z: 0};
+    this.previousRotation = {x: 0, y: 0};
+    this.direction = 0;
     this.syncData = {};
 
     this.keys = {
@@ -32,12 +34,12 @@ var Player = function (id, code) {
             dz = Math.cos(direction) * this.velocity;
         }
         if (this.keys.a) {
-            direction = this.direction - Math.PI/2;
+            direction -= Math.PI/2;
             dx = Math.sin(direction) * this.velocity;
             dz = Math.cos(direction) * this.velocity;
         }
         if (this.keys.d) {
-            direction = this.direction + Math.PI/2;
+            direction += Math.PI/2;
             dx = Math.sin(direction) * this.velocity;
             dz = Math.cos(direction) * this.velocity;
         }
@@ -51,6 +53,14 @@ var Player = function (id, code) {
 
             this.syncData.id = this.id;
             this.syncData.position = Object.assign({}, this.position);
+        }
+
+        if (this.previousRotation.x != this.rotation.x || this.previousRotation.y != this.rotation.y) {
+            this.previousRotation.x = this.rotation.x;
+            this.previousRotation.y = this.rotation.y;
+
+            this.syncData.id = this.id;
+            this.syncData.rotation = Object.assign({}, this.rotation);
         }
     };
 };

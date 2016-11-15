@@ -51,7 +51,6 @@ io.on('connection', function (socket) {
         }
     });
 
-        // Separate into player object
     socket.on('key_down', function (key, rotationY) {
         players[socket.id].keys[key] = true;
         players[socket.id].direction = rotationY * Math.PI/180;
@@ -59,6 +58,10 @@ io.on('connection', function (socket) {
 
     socket.on('key_up', function (key) {
         players[socket.id].keys[key] = false;
+    });
+
+    socket.on('mouse_rotate', function (rotation) {
+        players[socket.id].rotation = rotation;
     });
 
     socket.on('getOnlineUsers', function () {

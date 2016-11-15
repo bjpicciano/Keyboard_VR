@@ -45,6 +45,8 @@ AFRAME.registerComponent('mouse-lock', {
 
         a_camera.getAttribute("rotation").y -= movementX * sens;
         a_camera.getAttribute("rotation").x -= movementY * sens;
+
+        socket.emit("mouse_rotate", a_camera.getAttribute("rotation"));
     }
 
 });
