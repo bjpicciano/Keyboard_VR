@@ -51,9 +51,8 @@ io.on('connection', function (socket) {
         }
     });
 
-    socket.on('key_down', function (key, rotationY) {
+    socket.on('key_down', function (key) {
         players[socket.id].keys[key] = true;
-        players[socket.id].direction = rotationY * Math.PI/180;
     });
 
     socket.on('key_up', function (key) {

@@ -23,16 +23,21 @@ AFRAME.registerComponent('wasd-movement', {
         document.body.onkeydown = function (event) {
             var key = event.key;
             if (self.keys.hasOwnProperty(key)) {
-                var rotationY = document.querySelector("a-camera").getAttribute("rotation").y; // Actually x axis :|
-                self.keys[key] = true;
-                socket.emit("key_down", key, rotationY);
+                if (self.keys[key] == false) {
+                    self.keys[key] = true;
+
+                    var rotationY = document.querySelector("a-camera").getAttribute("rotation").y; // Actually x axis :|
+                    socket.emit("key_down", key, rotationY);
+                }
             }
         };
 
         document.body.onkeyup = function (event) {
             var key = event.key;
             if (self.keys.hasOwnProperty(key)) {
+                if (self.keys[key] == true)
                 self.keys[key] = false;
+
                 socket.emit("key_up", key);
             }
         };

@@ -23,7 +23,7 @@ function setUpSocketListeners() {
             document.querySelector('a-scene').appendChild(a_entity);
             document.querySelector('a-scene').appendChild(a_camera);
 
-            alert("Your mobile code is:\n\n'" + player.code + "'");
+            // alert("Your mobile code is:\n\n'" + player.code + "'");
         } else if (isMobile) {
             var code = prompt("Please enter your mobile code after connecting with your desktop");
 

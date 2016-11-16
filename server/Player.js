@@ -6,7 +6,6 @@ var Player = function (id, code) {
     this.rotation = {x: 0, y: 0};
     this.previousPosition = {x: 0, y: 0, z: 0};
     this.previousRotation = {x: 0, y: 0};
-    this.direction = 0;
     this.syncData = {};
 
     this.keys = {
@@ -23,25 +22,24 @@ var Player = function (id, code) {
     };
 
     this.handleInput = function () {
-        var dx = 0, dz = 0, direction = this.direction;
+        //Direction needs to be kept updated
+        var dx = 0, dz = 0, direction = this.rotation.y * Math.PI/180;
 
         if (this.keys.w) {
-            dx = Math.sin(direction) * -this.velocity;
-            dz = Math.cos(direction) * -this.velocity;
+            dx += Math.sin(direction) * -this.velocity;
+            dz += Math.cos(direction) * -this.velocity;
         }
         if (this.keys.s) {
-            dx = Math.sin(direction) * this.velocity;
-            dz = Math.cos(direction) * this.velocity;
+            dx += Math.sin(direction) * this.velocity;
+            dz += Math.cos(direction) * this.velocity;
         }
         if (this.keys.a) {
-            direction -= Math.PI/2;
-            dx = Math.sin(direction) * this.velocity;
-            dz = Math.cos(direction) * this.velocity;
+            dx += Math.sin(direction - Math.PI/2) * this.velocity;
+            dz += Math.cos(direction - Math.PI/2) * this.velocity;
         }
         if (this.keys.d) {
-            direction += Math.PI/2;
-            dx = Math.sin(direction) * this.velocity;
-            dz = Math.cos(direction) * this.velocity;
+            dx += Math.sin(direction + Math.PI/2) * this.velocity;
+            dz += Math.cos(direction + Math.PI/2) * this.velocity;
         }
 
         if (dx != 0 || dz != 0) {
