@@ -1,7 +1,7 @@
 // Here is where we connect to the server and set up our socket listeners
 var socket = io.connect('');
 setUpSocketListeners();
-socket.emit('handshake', AFRAME.utils.isMobile());
+socket.emit('handshake', (AFRAME.utils.isMobile || AFRAME.utils.device.isMobile)());
 
 /**
  * Declare our socket's listeners here.
